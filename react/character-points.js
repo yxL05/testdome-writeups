@@ -4,18 +4,32 @@ import ReactDOM from "react-dom/client";
 function CharacterAttributes({ totalPoints }) {
   const [strength, setStrength] = useState(0);
   const [speed, setSpeed] = useState(0);
+  const [remPoints, setRemPoints] = useState(totalPoints);
 
   const handleAttributeChange = (event, attributeName) => {
+    let newStrength, newSpeed;
+
     if (attributeName === "strength") {
-      setStrength(event.target.value);
+      newStrength = event.target.value;
+      setStrength(newStrength);
+
+      newSpeed = Math.min(speed, totalPoints - newStrength)
+      setSpeed(newSpeed);
+
     } else if (attributeName === "speed") {
-      setSpeed(event.target.value);
+      newSpeed = event.target.value;
+      setSpeed(newSpeed);
+
+      newStrength = Math.min(strength, totalPoints - newSpeed);
+      setStrength(newStrength);
     }
+
+    setRemPoints(totalPoints - newSpeed - newStrength);
   };
 
   return (
     <div>
-      Character stats: <span id="points">{totalPoints}</span> points
+      Character stats: <span id="points">{remPoints}</span> points
       <div>
         <input
           type="range"
